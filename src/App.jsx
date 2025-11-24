@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import CustomerNewBookingPage from "./pages/CustomerNewBookingPage";
+import CustomerEditBookingPage from "./pages/CustomerEditBookingPage";
 import CustomerBookingsPage from "./pages/CustomerBookingsPage";
 import StaffDashboardPage from "./pages/StaffDashboardPage";
 import PrivacyPage from "./pages/PrivacyPage";
@@ -52,6 +53,14 @@ function App() {
           element={
             <RequireRole role="customer">
               <CustomerBookingsPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/customer/edit-booking/:bookingId"
+          element={
+            <RequireRole role="customer">
+              <CustomerEditBookingPage />
             </RequireRole>
           }
         />

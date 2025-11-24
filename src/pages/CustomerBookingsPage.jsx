@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth.jsx";
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth.jsx'
 import {
   listBookingsByCustomer,
   updateBookingStatus,
-} from "../services/storage";
+} from '../services/storage'
 
 const styles = {
   pageHeader: {
@@ -28,7 +29,7 @@ const styles = {
   },
 };
 
-function BookingSection({ title, bookings, onCancel }) {
+function BookingSection({ title, bookings, onCancel, onEdit }) {
   const icon = title.includes("Upcoming") ? "⏰" : "✅";
 
   return (
@@ -56,12 +57,20 @@ function BookingSection({ title, bookings, onCancel }) {
               <p>{booking.address}</p>
               {booking.notes && <p>Notes: {booking.notes}</p>}
               {booking.status === "pending" && (
-                <button
-                  className="btn-secondary"
-                  onClick={() => onCancel(booking.id)}
-                >
-                  Cancel booking
-                </button>
+                <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
+                  <button
+                    className="btn-primary"
+                    onClick={() => onEdit(booking.id)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => onCancel(booking.id)}
+                  >
+                    Cancel
+                  </button>
+                </div>
               )}
             </article>
           ))}
@@ -72,8 +81,9 @@ function BookingSection({ title, bookings, onCancel }) {
 }
 
 function CustomerBookingsPage() {
-  const { currentUser } = useAuth();
-  const [bookings, setBookings] = useState([]);
+  const { currentUser } = useAuth()
+  const navigate = useNavigate()
+  const [bookings, setBookings] = useState([])
 
   useEffect(() => {
     if (!currentUser) return;
@@ -90,6 +100,10 @@ function CustomerBookingsPage() {
     if (!window.confirm("Cancel this booking?")) return;
     updateBookingStatus(bookingId, "cancelled");
     refresh();
+  };
+
+  const handleEdit = (bookingId) => {
+    navigate(`/customer/edit-booking/${bookingId}`);
   };
 
   const upcoming = bookings.filter((b) =>
@@ -111,6 +125,7 @@ function CustomerBookingsPage() {
         title="Upcoming"
         bookings={upcoming}
         onCancel={handleCancel}
+        onEdit={handleEdit}
       />
       <BookingSection title="Past" bookings={past} onCancel={handleCancel} />
     </section>

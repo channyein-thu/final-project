@@ -266,6 +266,46 @@ export const updateBookingStatus = (bookingId, newStatus) => {
   return null;
 };
 
+// Update booking details (customer can edit their own bookings)
+export const updateBooking = (bookingId, updates) => {
+  const usersDB = getUsersDB();
+
+  // Find the booking across all users
+  for (const userKey in usersDB) {
+    const user = usersDB[userKey];
+    if (user.bookings) {
+      const bookingIndex = user.bookings.findIndex((b) => b.id === bookingId);
+      if (bookingIndex !== -1) {
+        // Update booking with new data
+        user.bookings[bookingIndex] = {
+          ...user.bookings[bookingIndex],
+          ...updates,
+          updatedAt: new Date().toISOString(),
+        };
+        updateUserInDB(user);
+        return user.bookings[bookingIndex];
+      }
+    }
+  }
+  return null;
+};
+
+// Get single booking by ID
+export const getBookingById = (bookingId) => {
+  const usersDB = getUsersDB();
+
+  for (const userKey in usersDB) {
+    const user = usersDB[userKey];
+    if (user.bookings) {
+      const booking = user.bookings.find((b) => b.id === bookingId);
+      if (booking) {
+        return booking;
+      }
+    }
+  }
+  return null;
+};
+
 // Clear current user's bookings only
 export const clearUserData = () => {
   const currentUser = getCurrentUser();
