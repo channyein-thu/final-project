@@ -1,14 +1,14 @@
-import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
-import { useAuth } from './hooks/useAuth.jsx'
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { useAuth } from "./hooks/useAuth.jsx";
 
-import Navbar from './components/layout/Navbar'
-import HomePage from './pages/HomePage'
-import LoginPage from './pages/LoginPage'
-import SignupPage from './pages/SignupPage'
-import CustomerNewBookingPage from './pages/CustomerNewBookingPage'
-import CustomerBookingsPage from './pages/CustomerBookingsPage'
-import StaffDashboardPage from './pages/StaffDashboardPage'
-import PrivacyPage from './pages/PrivacyPage'
+import Navbar from "./components/layout/Navbar";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import CustomerNewBookingPage from "./pages/CustomerNewBookingPage";
+import CustomerBookingsPage from "./pages/CustomerBookingsPage";
+import StaffDashboardPage from "./pages/StaffDashboardPage";
+import PrivacyPage from "./pages/PrivacyPage";
 
 function Layout() {
   return (
@@ -18,18 +18,18 @@ function Layout() {
         <Outlet />
       </main>
     </div>
-  )
+  );
 }
 
 function RequireRole({ role, children }) {
-  const { currentUser } = useAuth()
-  const location = useLocation()
+  const { currentUser } = useAuth();
+  const location = useLocation();
 
   if (!currentUser || (role && currentUser.role !== role)) {
-    return <Navigate to="/login" state={{ from: location }} replace />
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return children
+  return children;
 }
 
 function App() {
@@ -67,7 +67,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -21,6 +21,7 @@ Follow-up TODOs: None
 ## Core Principles
 
 ### Principle I – Demo-Bounded Scope
+
 Deliverables MUST stay within a 1–3 hour, exam-ready SPA that focuses solely on
 booking, managing, or reviewing home cleaning appointments. Scope creep (extra
 modules, authentication backends, payment systems, etc.) is prohibited unless the
@@ -28,6 +29,7 @@ plan documents how it still fits inside the demo window. Rationale: a strict sco
 guarantees the project remains finishable and reviewable during the exam.
 
 ### Principle II – Pure React Frontend Stack
+
 All product code MUST use React + Vite with plain JavaScript, React Router for
 client-side navigation, and in-browser storage only. Backends, serverless
 functions, and TypeScript are explicitly out-of-bounds. Rationale: keeping the
@@ -35,6 +37,7 @@ stack uniform preserves speed, reduces setup, and aligns with the exam
 expectations.
 
 ### Principle III – Role-Clear Booking Workflows
+
 The SPA MUST provide distinct yet consistent flows for Customers (request,
 review, cancel, reschedule bookings) and Staff (view assignments, update status to
 Pending, Confirmed, Completed, or Cancelled). Any feature proposal that benefits
@@ -42,6 +45,7 @@ only one role must explain why parity is unnecessary. Rationale: both roles are
 core to demonstrating operational completeness.
 
 ### Principle IV – Structured Local Data Layer
+
 User, ServiceType, and Booking entities (with the attributes listed in the
 project brief) MUST be defined in a single data-layer module that wraps
 localStorage for CRUD and status transitions. Components interact with this layer
@@ -49,6 +53,7 @@ through hooks to keep UI code declarative and testable. Rationale: a consistent
 data contract makes the in-memory API believable and simplifies demos.
 
 ### Principle V – Privacy & Usability Discipline
+
 The app MUST surface a “Privacy & Data Use” page, explain how personal data is
 handled locally, and provide a visible action to clear/delete local data. Booking
 forms require inline validation, and every page must include empty, loading, and

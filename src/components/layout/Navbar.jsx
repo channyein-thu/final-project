@@ -1,19 +1,19 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth.jsx'
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth.jsx";
 
 const brandStyle = {
   fontWeight: 700,
-  fontSize: '1.15rem',
-}
+  fontSize: "1.15rem",
+};
 
 function Navbar() {
-  const { currentUser, logout } = useAuth()
-  const navigate = useNavigate()
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout()
-    navigate('/')
-  }
+    logout();
+    navigate("/");
+  };
 
   const renderLinks = () => {
     if (!currentUser) {
@@ -22,10 +22,10 @@ function Navbar() {
           <Link to="/">Home</Link>
           <Link to="/login">Login</Link>
         </>
-      )
+      );
     }
 
-    if (currentUser.role === 'customer') {
+    if (currentUser.role === "customer") {
       return (
         <>
           <Link to="/customer/new-booking">New Booking</Link>
@@ -35,10 +35,10 @@ function Navbar() {
             Logout
           </button>
         </>
-      )
+      );
     }
 
-    if (currentUser.role === 'staff') {
+    if (currentUser.role === "staff") {
       return (
         <>
           <Link to="/staff/dashboard">Staff Dashboard</Link>
@@ -47,11 +47,11 @@ function Navbar() {
             Logout
           </button>
         </>
-      )
+      );
     }
 
-    return null
-  }
+    return null;
+  };
 
   return (
     <header className="navbar">
@@ -60,7 +60,7 @@ function Navbar() {
       </Link>
       <nav className="nav-links">{renderLinks()}</nav>
     </header>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

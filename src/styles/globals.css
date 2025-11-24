@@ -1,5 +1,6 @@
 :root {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   color: #0f172a;
   line-height: 1.5;
   font-weight: 400;
@@ -34,7 +35,7 @@ a:hover {
 }
 
 .app-shell::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
@@ -66,7 +67,7 @@ main {
 }
 
 .navbar::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -109,7 +110,7 @@ main {
 }
 
 .btn-primary::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
@@ -156,14 +157,16 @@ main {
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
 }
 
 .form-grid {
@@ -189,7 +192,8 @@ select:focus,
 textarea:focus {
   border-color: #667eea;
   background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1),
+    0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
 .label {
@@ -234,7 +238,8 @@ textarea:focus {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -270,7 +275,9 @@ button:active {
   transform: translateY(0) !important;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

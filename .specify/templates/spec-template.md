@@ -7,9 +7,9 @@
 
 > Constitution alignment: Each spec MUST keep scope within the SPA, document both Customer and Staff impact, and call out privacy/data handling considerations.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
-*Prioritize independent slices. Provide at least one P1 journey for Customers and one for Staff. Tie every acceptance test back to booking statuses and personal data handling.*
+_Prioritize independent slices. Provide at least one P1 journey for Customers and one for Staff. Tie every acceptance test back to booking statuses and personal data handling._
 
 ### User Story 1 - Customer Booking Flow (Priority: P1)
 
@@ -62,7 +62,7 @@
 - Missing or corrupted localStorage entries during app boot
 - Status updates after a booking was cancelled by the other role
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -73,15 +73,15 @@
 - **FR-005**: The UI MUST present privacy/data-use messaging plus a clear action to delete all locally stored data.
 - **FR-006**: Loading, empty, and error states MUST be defined for each page that consumes asynchronous or simulated data operations.
 
-*Use `NEEDS CLARIFICATION` only when a constitutional rule is at risk (e.g., new role, backend call, or expanded scope).*
+_Use `NEEDS CLARIFICATION` only when a constitutional rule is at risk (e.g., new role, backend call, or expanded scope)._
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **User**: `{ id, role (customer|staff), name, email, phone }` with customer vs staff responsibilities documented.
 - **ServiceType**: `{ id, name, description, basePrice }` referenced by bookings and seeded in `src/data/serviceTypes.ts`.
 - **Booking**: `{ id, customerId, serviceTypeId, date, time, address, notes, status }` plus derived getters (upcoming/past) for UI hooks.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
