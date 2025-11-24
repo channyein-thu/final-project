@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth.jsx'
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.jsx";
 import {
   listBookingsByCustomer,
   updateBookingStatus,
-} from '../services/storage'
+} from "../services/storage";
 
 const styles = {
   pageHeader: {
@@ -57,7 +57,9 @@ function BookingSection({ title, bookings, onCancel, onEdit }) {
               <p>{booking.address}</p>
               {booking.notes && <p>Notes: {booking.notes}</p>}
               {booking.status === "pending" && (
-                <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
+                <div
+                  style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}
+                >
                   <button
                     className="btn-primary"
                     onClick={() => onEdit(booking.id)}
@@ -81,9 +83,9 @@ function BookingSection({ title, bookings, onCancel, onEdit }) {
 }
 
 function CustomerBookingsPage() {
-  const { currentUser } = useAuth()
-  const navigate = useNavigate()
-  const [bookings, setBookings] = useState([])
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     if (!currentUser) return;

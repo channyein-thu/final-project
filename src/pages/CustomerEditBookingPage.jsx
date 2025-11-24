@@ -1,87 +1,87 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth.jsx'
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.jsx";
 import {
   updateBooking,
   getBookingById,
   getServiceTypes,
-  seedDefaultServiceTypes
-} from '../services/storage'
+  seedDefaultServiceTypes,
+} from "../services/storage";
 
 function CustomerEditBookingPage() {
-  const { bookingId } = useParams()
-  const { currentUser } = useAuth()
-  const navigate = useNavigate()
-  const [services, setServices] = useState([])
-  const [loading, setLoading] = useState(true)
+  const { bookingId } = useParams();
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
-    serviceTypeId: '',
-    date: '',
-    time: '',
-    address: '',
-    notes: ''
-  })
+    serviceTypeId: "",
+    date: "",
+    time: "",
+    address: "",
+    notes: "",
+  });
 
   const styles = {
     pageHeader: {
-      textAlign: 'center',
-      marginBottom: '2rem',
+      textAlign: "center",
+      marginBottom: "2rem",
     },
     title: {
-      fontSize: '2.5rem',
-      marginBottom: '0.5rem',
+      fontSize: "2.5rem",
+      marginBottom: "0.5rem",
     },
     subtitle: {
-      fontSize: '1.1rem',
-      color: 'rgba(255, 255, 255, 0.9)',
-      textShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
+      fontSize: "1.1rem",
+      color: "rgba(255, 255, 255, 0.9)",
+      textShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
     },
   };
 
   useEffect(() => {
-    seedDefaultServiceTypes()
-    setServices(getServiceTypes())
-    
+    seedDefaultServiceTypes();
+    setServices(getServiceTypes());
+
     // Load existing booking
-    const booking = getBookingById(bookingId)
+    const booking = getBookingById(bookingId);
     if (!booking) {
-      alert('Booking not found')
-      navigate('/customer/bookings')
-      return
+      alert("Booking not found");
+      navigate("/customer/bookings");
+      return;
     }
-    
+
     // Check if user owns this booking
     if (booking.customerId !== currentUser?.id) {
-      alert('You can only edit your own bookings')
-      navigate('/customer/bookings')
-      return
+      alert("You can only edit your own bookings");
+      navigate("/customer/bookings");
+      return;
     }
-    
+
     // Check if booking is editable (only pending bookings)
-    if (booking.status !== 'pending') {
-      alert('You can only edit pending bookings')
-      navigate('/customer/bookings')
-      return
+    if (booking.status !== "pending") {
+      alert("You can only edit pending bookings");
+      navigate("/customer/bookings");
+      return;
     }
-    
+
     // Populate form with existing data
     setForm({
       serviceTypeId: booking.serviceTypeId,
       date: booking.date,
       time: booking.time,
       address: booking.address,
-      notes: booking.notes || ''
-    })
-    
-    setLoading(false)
-  }, [bookingId, currentUser, navigate])
+      notes: booking.notes || "",
+    });
+
+    setLoading(false);
+  }, [bookingId, currentUser, navigate]);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!form.serviceTypeId || !form.date || !form.time || !form.address) {
-      alert('Please fill in all required fields')
-      return
+      alert("Please fill in all required fields");
+      return;
     }
 
     const updated = updateBooking(bookingId, {
@@ -89,16 +89,16 @@ function CustomerEditBookingPage() {
       date: form.date,
       time: form.time,
       address: form.address,
-      notes: form.notes
-    })
+      notes: form.notes,
+    });
 
     if (updated) {
-      alert('Booking updated successfully!')
-      navigate('/customer/bookings')
+      alert("Booking updated successfully!");
+      navigate("/customer/bookings");
     } else {
-      alert('Failed to update booking')
+      alert("Failed to update booking");
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -107,7 +107,7 @@ function CustomerEditBookingPage() {
           <h1 style={styles.title}>Loading...</h1>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -122,7 +122,9 @@ function CustomerEditBookingPage() {
             <span>Service Type *</span>
             <select
               value={form.serviceTypeId}
-              onChange={(e) => setForm({ ...form, serviceTypeId: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, serviceTypeId: e.target.value })
+              }
               required
             >
               <option value="">-- Select a service --</option>
@@ -141,7 +143,7 @@ function CustomerEditBookingPage() {
               value={form.date}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
               required
-              min={new Date().toISOString().split('T')[0]}
+              min={new Date().toISOString().split("T")[0]}
             />
           </label>
 
@@ -176,14 +178,14 @@ function CustomerEditBookingPage() {
             />
           </label>
 
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+          <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
             <button type="submit" className="btn-primary" style={{ flex: 1 }}>
               💾 Save Changes
             </button>
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => navigate('/customer/bookings')}
+              onClick={() => navigate("/customer/bookings")}
               style={{ flex: 1 }}
             >
               Cancel
@@ -192,7 +194,7 @@ function CustomerEditBookingPage() {
         </form>
       </div>
     </section>
-  )
+  );
 }
 
-export default CustomerEditBookingPage
+export default CustomerEditBookingPage;
