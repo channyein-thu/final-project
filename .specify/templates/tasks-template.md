@@ -1,6 +1,5 @@
 ---
-
-description: "Task list template for feature implementation"
+description: "Task list template for cleaning service SPA features"
 ---
 
 # Tasks: [FEATURE NAME]
@@ -8,22 +7,22 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: Include Vitest/RTL tasks only when explicitly requested. Manual demo scripts are valid deliverables when noted in the spec.
 
-**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+**Organization**: Tasks are grouped by user story so Customer and Staff work stay independently testable. Use the `[Story]` tag to call out role ownership (`CUST`, `STAFF`, `PRIV`).
 
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
-- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
-- Include exact file paths in descriptions
+- **[Story]**: Use role-aligned labels (e.g., `US1-CUST`, `US2-STAFF`, `US3-PRIV`)
+- Include exact file paths in descriptions (e.g., `src/pages/BookingsPage.jsx`)
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- SPA root: `src/` with subfolders `components/`, `pages/`, `hooks/`, `data/`, `router/`, `styles/`
+- Tests (if any): `src/__tests__/` colocated with components
+- Static assets: `public/`
+- Data layer lives in `src/data/` and exposes hooks via `src/hooks/`
 
 <!-- 
   ============================================================================
@@ -33,7 +32,7 @@ description: "Task list template for feature implementation"
   - User stories from spec.md (with their priorities P1, P2, P3...)
   - Feature requirements from plan.md
   - Entities from data-model.md
-  - Endpoints from contracts/
+  - Privacy/data obligations from the constitution
   
   Tasks MUST be organized by user story so each story can be:
   - Implemented independently
@@ -46,99 +45,86 @@ description: "Task list template for feature implementation"
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Project initialization and basic structure
+**Purpose**: Keep Vite/React project healthy and aligned with guardrails.
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 Ensure `src/components`, `src/pages`, `src/hooks`, and `src/data` folders exist per plan structure
+- [ ] T002 Install/verify React Router and baseline styling approach (CSS Modules or Tailwind)
+- [ ] T003 [P] Configure project linting/formatting plus sample Vitest setup (optional)
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
+**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented.
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+**⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-Examples of foundational tasks (adjust based on your project):
+- [ ] T004 Build or update `src/data/users.js`, `serviceTypes.js`, and `bookings.js` with entity schemas + sample seeds
+- [ ] T005 [P] Add `src/hooks/useBookings.js` (or equivalent) to wrap localStorage CRUD with status helpers
+- [ ] T006 [P] Implement `src/router/index.jsx` with routes for Customer, Staff, Privacy pages
+- [ ] T007 Define shared UI states (loading, empty, error) in `src/components/states/`
+- [ ] T008 Wire privacy data delete helper that clears localStorage keys safely
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
-
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+**Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
 
 ---
 
-## Phase 3: User Story 1 - [Title] (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 - Customer Booking Flow (Priority: P1) 🎯 MVP
 
-**Goal**: [Brief description of what this story delivers]
+**Goal**: Customer can create, view, reschedule, and cancel bookings with inline validation.
 
-**Independent Test**: [How to verify this story works on its own]
+**Independent Test**: Manually walk through booking creation/reschedule in Customer UI while verifying loading/empty states.
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 1 (OPTIONAL) ⚠️
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
-
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T010 [P] [US1-CUST] Component test for `BookingForm` validation in `src/__tests__/BookingForm.test.jsx`
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T011 [US1-CUST] Build `src/components/BookingForm.jsx` with validation + status messaging
+- [ ] T012 [US1-CUST] Implement `src/pages/CustomerDashboard.jsx` (lists upcoming/past bookings with empty/loading states)
+- [ ] T013 [P][US1-CUST] Add reschedule + cancel actions that call `useBookings` mutations and persist to localStorage
+- [ ] T014 [US1-CUST] Document manual demo steps covering create → cancel flow in `specs/[###-feature]/quickstart.md`
 
-**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
+**Checkpoint**: Customer story fully testable without Staff UI.
 
 ---
 
-## Phase 4: User Story 2 - [Title] (Priority: P2)
+## Phase 4: User Story 2 - Staff Assignment Management (Priority: P2)
 
-**Goal**: [Brief description of what this story delivers]
+**Goal**: Staff reviews bookings, updates status, and sees filters per status.
 
-**Independent Test**: [How to verify this story works on its own]
+**Independent Test**: Switch to Staff route, confirm actions update the shared data layer instantly.
 
-### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 2 (OPTIONAL) ⚠️
 
-- [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T015 [P][US2-STAFF] Hook test for `useBookings` status transitions
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T023 [US2] Integrate with User Story 1 components (if needed)
+- [ ] T016 [US2-STAFF] Create `src/pages/StaffAssignments.jsx` with status filters + list state handling
+- [ ] T017 [US2-STAFF] Implement `src/components/StatusBadge.jsx` reused by both roles
+- [ ] T018 [US2-STAFF] Wire status update actions (`Pending→Confirmed→Completed`, `→Cancelled`) through data layer
+- [ ] T019 [US2-STAFF] Ensure Staff changes reflect in Customer dashboard without refresh (shared hook state)
 
-**Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
+**Checkpoint**: Both role stories work independently yet share data.
 
 ---
 
-## Phase 5: User Story 3 - [Title] (Priority: P3)
+## Phase 5: User Story 3 - Privacy & Data Controls (Priority: P3)
 
-**Goal**: [Brief description of what this story delivers]
+**Goal**: Privacy notice page + data deletion UX + responsive polish.
 
-**Independent Test**: [How to verify this story works on its own]
-
-### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
-
-- [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
+**Independent Test**: Navigate directly to Privacy route, verify copy, delete action, and mobile layout.
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T020 [US3-PRIV] Build `src/pages/PrivacyPage.jsx` with PDPA notice + link from navbar
+- [ ] T021 [US3-PRIV] Implement `ClearLocalDataButton` triggering the helper from Phase 2 and confirming UI state resets
+- [ ] T022 [P][US3-PRIV] Add responsive layout tweaks (e.g., CSS utilities) to navbar + dashboards
+- [ ] T023 [US3-PRIV] Record privacy compliance steps in `specs/[###-feature]/quickstart.md`
 
-**Checkpoint**: All user stories should now be independently functional
+**Checkpoint**: Privacy + UX story complete and demonstrable on its own.
 
 ---
 
@@ -148,14 +134,12 @@ Examples of foundational tasks (adjust based on your project):
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
-**Purpose**: Improvements that affect multiple user stories
+**Purpose**: Improvements spanning multiple user stories.
 
-- [ ] TXXX [P] Documentation updates in docs/
-- [ ] TXXX Code cleanup and refactoring
-- [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
-- [ ] TXXX Run quickstart.md validation
+- [ ] TXXX [P] Update documentation in `specs/[###-feature]/quickstart.md` and project README/Privacy copy
+- [ ] TXXX Code cleanup, component extraction, and comments for exam readiness
+- [ ] TXXX [P] Optional performance or accessibility checks (e.g., Lighthouse quick scan)
+- [ ] TXXX Verify privacy delete flow still works after recent changes
 
 ---
 
@@ -165,46 +149,41 @@ Examples of foundational tasks (adjust based on your project):
 
 - **Setup (Phase 1)**: No dependencies - can start immediately
 - **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories
-- **User Stories (Phase 3+)**: All depend on Foundational phase completion
-  - User stories can then proceed in parallel (if staffed)
-  - Or sequentially in priority order (P1 → P2 → P3)
+- **User Stories (Phase 3+)**: Depend on Foundational phase completion; once ready, each role story can proceed independently
 - **Polish (Final Phase)**: Depends on all desired user stories being complete
 
 ### User Story Dependencies
 
-- **User Story 1 (P1)**: Can start after Foundational (Phase 2) - No dependencies on other stories
-- **User Story 2 (P2)**: Can start after Foundational (Phase 2) - May integrate with US1 but should be independently testable
-- **User Story 3 (P3)**: Can start after Foundational (Phase 2) - May integrate with US1/US2 but should be independently testable
+- **User Story 1 (Customer)**: Starts after Foundational - no dependency on Staff/Privacy
+- **User Story 2 (Staff)**: Starts after Foundational - may consume UI components from User Story 1 but must remain testable alone
+- **User Story 3 (Privacy)**: Starts after Foundational - depends only on data delete helper from Phase 2
 
 ### Within Each User Story
 
-- Tests (if included) MUST be written and FAIL before implementation
-- Models before services
-- Services before endpoints
-- Core implementation before integration
-- Story complete before moving to next priority
+- Write or script tests first (Vitest or documented manual steps) and ensure they fail or are unfulfilled before coding
+- Touch `src/data` through hooks only; never mutate localStorage directly inside components
+- Deliver loading/empty/error states before cosmetic polish
+- Mark blockers in Complexity Tracking when deviating from guardrails
 
 ### Parallel Opportunities
 
-- All Setup tasks marked [P] can run in parallel
-- All Foundational tasks marked [P] can run in parallel (within Phase 2)
-- Once Foundational phase completes, all user stories can start in parallel (if team capacity allows)
-- All tests for a user story marked [P] can run in parallel
-- Models within a story marked [P] can run in parallel
-- Different user stories can be worked on in parallel by different team members
+- Setup tasks marked [P] can run in parallel
+- Data layer, router, and UI state helpers (Phase 2) can run concurrently when touching different files
+- Customer, Staff, and Privacy stories can proceed in parallel once hooks are ready, as long as shared components are coordinated
+- Tests/documentation tasks can run parallel to implementation if they do not modify the same files
 
 ---
 
 ## Parallel Example: User Story 1
 
 ```bash
-# Launch all tests for User Story 1 together (if tests requested):
-Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
-Task: "Integration test for [user journey] in tests/integration/test_[name].py"
+# Kick off component + hook validation together
+Task: "T010 [P][US1-CUST] Component test for BookingForm"
+Task: "T013 [P][US1-CUST] Reschedule/cancel actions"
 
-# Launch all models for User Story 1 together:
-Task: "Create [Entity1] model in src/models/[entity1].py"
-Task: "Create [Entity2] model in src/models/[entity2].py"
+# Launch responsive+state work in parallel when files differ
+Task: "T012 CustomerDashboard state views"
+Task: "T011 BookingForm validation"
 ```
 
 ---
@@ -215,37 +194,34 @@ Task: "Create [Entity2] model in src/models/[entity2].py"
 
 1. Complete Phase 1: Setup
 2. Complete Phase 2: Foundational (CRITICAL - blocks all stories)
-3. Complete Phase 3: User Story 1
-4. **STOP and VALIDATE**: Test User Story 1 independently
-5. Deploy/demo if ready
+3. Complete Phase 3: Customer Booking Flow
+4. **STOP and VALIDATE**: Demo Customer flow end-to-end using the quickstart steps
+5. Demo/record results before continuing
 
 ### Incremental Delivery
 
-1. Complete Setup + Foundational → Foundation ready
-2. Add User Story 1 → Test independently → Deploy/Demo (MVP!)
-3. Add User Story 2 → Test independently → Deploy/Demo
-4. Add User Story 3 → Test independently → Deploy/Demo
-5. Each story adds value without breaking previous stories
+1. Setup + Foundational → Foundation ready
+2. Add Customer story → Test independently → Demo
+3. Add Staff story → Test independently → Demo
+4. Add Privacy story → Test independently → Demo
+5. Each increment should include privacy/data considerations relevant to that story
 
 ### Parallel Team Strategy
 
 With multiple developers:
 
-1. Team completes Setup + Foundational together
-2. Once Foundational is done:
-   - Developer A: User Story 1
-   - Developer B: User Story 2
-   - Developer C: User Story 3
-3. Stories complete and integrate independently
+1. Complete Setup + Foundational as a group (ensure shared hooks + privacy helpers exist)
+2. Assign Customer, Staff, and Privacy stories to different owners
+3. Coordinate via shared `src/data` contracts; avoid parallel edits to the same hook
+4. Re-run manual demo steps after every merge to ensure localStorage stays consistent
 
 ---
 
 ## Notes
 
 - [P] tasks = different files, no dependencies
-- [Story] label maps task to specific user story for traceability
-- Each user story should be independently completable and testable
-- Verify tests fail before implementing
-- Commit after each task or logical group
-- Stop at any checkpoint to validate story independently
-- Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
+- [Story] label maps tasks to user stories AND roles for traceability
+- Each user story must be independently demoable and include privacy + UX states relevant to that flow
+- Prefer documenting manual verification steps when automated tests are skipped
+- Commit after each task or logical group; keep diffs small for exam review
+- Stop at any checkpoint to validate story independently; do not roll multiple stories into one PR

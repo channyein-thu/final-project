@@ -11,27 +11,25 @@
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: React 18 + Vite (JavaScript, no TypeScript) — REQUIRED  
+**Primary Dependencies**: React Router, localStorage data layer utilities, lightweight styling (CSS Modules or Tailwind)  
+**Storage**: Browser `localStorage` wrapped by `/src/data` helpers (no backend)  
+**Testing**: Lightweight component tests (e.g., Vitest/React Testing Library) or manual demo steps captured in tasks  
+**Target Platform**: Modern Chromium/WebKit browsers on desktop + mobile  
+**Project Type**: Single-page web app (SPA)  
+**Performance Goals**: Instant navigation (<500 ms view swaps) and responsive layout at common breakpoints  
+**Constraints**: Must fit a 1–3 hour demo scope; zero server dependencies; privacy notice + data delete flow  
+**Scale/Scope**: Single cleaner booking workflow with sample data sized for demos
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+1. **Demo Scope** – Confirm the feature can be reasoned about, implemented, and demoed inside 1–3 hours without introducing new domains.
+2. **React-Only Stack** – Validate no backend, serverless call, or TypeScript work is introduced; all routing stays client-side.
+3. **Role Coverage** – Ensure both Customer and Staff touchpoints remain intact (or explain any intentional omission and log in Complexity Tracking).
+4. **Data Layer Plan** – Document how `src/data` entities and hooks will change, including status transitions and sample seeds.
+5. **Privacy & UX** – Describe the Privacy & Data Use page impact plus how loading/empty/error states and data deletion controls will be covered.
 
 ## Project Structure
 
@@ -48,51 +46,22 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+├── components/          # Presentational + form widgets
+├── pages/               # Route-level screens for Customers & Staff
+├── hooks/               # Reusable state/data hooks (e.g., useBookings)
+├── data/                # localStorage-backed entities + seed data
+├── router/              # React Router config
+├── styles/              # Global styles or Tailwind config
+└── __tests__/           # Optional Vitest/RTL tests when authored
 
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+public/
+└── index.html           # Vite entry point
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: [Document any deviations (e.g., additional feature folders) and justify them against the architecture guardrails.]
 
 ## Complexity Tracking
 

@@ -5,28 +5,19 @@
 **Status**: Draft  
 **Input**: User description: "$ARGUMENTS"
 
+> Constitution alignment: Each spec MUST keep scope within the SPA, document both Customer and Staff impact, and call out privacy/data handling considerations.
+
 ## User Scenarios & Testing *(mandatory)*
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
+*Prioritize independent slices. Provide at least one P1 journey for Customers and one for Staff. Tie every acceptance test back to booking statuses and personal data handling.*
 
-### User Story 1 - [Brief Title] (Priority: P1)
+### User Story 1 - Customer Booking Flow (Priority: P1)
 
-[Describe this user journey in plain language]
+[Describe how a Customer requests, edits, or cancels a booking]
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+**Independent Test**: [Describe the single flow that proves the story succeeds (e.g., "Create booking, see it in Upcoming list, cancel it")]
 
 **Acceptance Scenarios**:
 
@@ -35,13 +26,13 @@
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### User Story 2 - Staff Assignment Management (Priority: P2)
 
-[Describe this user journey in plain language]
+[Describe how Staff review bookings, confirm, complete, or cancel]
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: [Describe how Staff-only UI can be validated independently]
 
 **Acceptance Scenarios**:
 
@@ -49,13 +40,13 @@
 
 ---
 
-### User Story 3 - [Brief Title] (Priority: P3)
+### User Story 3 - Privacy & Data Controls (Priority: P3)
 
-[Describe this user journey in plain language]
+[Describe privacy notice, data export/delete, or responsive UX polish]
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: [Describe how privacy/data tasks are validated without relying on other stories]
 
 **Acceptance Scenarios**:
 
@@ -63,53 +54,38 @@
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+[Add more user stories as needed, each with an assigned priority and clear owner (Customer or Staff).]
 
 ### Edge Cases
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
-
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+- Double-booking attempts for the same slot/service
+- Missing or corrupted localStorage entries during app boot
+- Status updates after a booking was cancelled by the other role
 
 ## Requirements *(mandatory)*
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
-
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: Implementation MUST stay inside the React + Vite SPA with JavaScript only.
+- **FR-002**: Customers MUST be able to create, view, reschedule, and cancel bookings with validation on date, time, and address fields.
+- **FR-003**: Staff MUST be able to view assigned bookings and change status among Pending, Confirmed, Completed, or Cancelled.
+- **FR-004**: All booking, user, and service updates MUST go through the shared `src/data` localStorage wrapper and expose hooks for components.
+- **FR-005**: The UI MUST present privacy/data-use messaging plus a clear action to delete all locally stored data.
+- **FR-006**: Loading, empty, and error states MUST be defined for each page that consumes asynchronous or simulated data operations.
 
-*Example of marking unclear requirements:*
-
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+*Use `NEEDS CLARIFICATION` only when a constitutional rule is at risk (e.g., new role, backend call, or expanded scope).*
 
 ### Key Entities *(include if feature involves data)*
 
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
+- **User**: `{ id, role (customer|staff), name, email, phone }` with customer vs staff responsibilities documented.
+- **ServiceType**: `{ id, name, description, basePrice }` referenced by bookings and seeded in `src/data/serviceTypes.ts`.
+- **Booking**: `{ id, customerId, serviceTypeId, date, time, address, notes, status }` plus derived getters (upcoming/past) for UI hooks.
 
 ## Success Criteria *(mandatory)*
 
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-001**: A user can complete the targeted story (per role) end-to-end in <3 clicks per step, all within the SPA.
+- **SC-002**: Booking state changes propagate instantly to both role views without manual refresh (React state or hooks update).
+- **SC-003**: Privacy notice and data delete controls are reachable within 2 interactions from any route.
+- **SC-004**: Empty/loading/error states are demonstrated for at least one Customer and one Staff view during the demo.
